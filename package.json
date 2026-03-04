@@ -1,0 +1,33 @@
+{
+  "name": "optimist",
+  "version": "1.0.0",
+  "description": "optimist is a node cli that scans the codebase and finds things that slow your React/Next JS application primarily images and videos",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/index.ts"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "node",
+    "cli",
+    "image",
+    "image compression",
+    "image optimization",
+    "optimization"
+  ],
+  "author": "Aayush Maharjan",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.28",
+    "@types/node": "^25.3.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "fluent-ffmpeg": "^2.1.3",
+    "sharp": "^0.34.5"
+  }
+}
