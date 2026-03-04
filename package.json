@@ -18,6 +18,9 @@
     "optimization"
   ],
   "author": "Aayush Maharjan",
+  "bin": {
+    "optimist": "./src/index.ts"
+  },
   "license": "ISC",
   "type": "module",
   "devDependencies": {
