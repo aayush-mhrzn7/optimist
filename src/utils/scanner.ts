@@ -2,13 +2,13 @@ import { glob } from "tinyglobby";
 
 const DEFAULT_IGNORE = [
   "node_modules/**",
-  ".next/**",
+  "next/**",
   "dist/**",
-  "git/**",
+  ".git/**",
   "build/**",
 ];
 
-async function ScanMedia(dir: string) {
+async function scanMedia(dir: string = ".") {
   const ignore = [...DEFAULT_IGNORE];
   const [images, videos] = await Promise.all([
     glob(["**/*.{png,jpg,jpeg,JPG,JPEG,PNG}"], {
@@ -28,13 +28,13 @@ async function ScanMedia(dir: string) {
   };
 }
 
-export async function scanCode(dir: string = ".") {
+async function scanCode(dir: string = ".") {
   const ignore = [...DEFAULT_IGNORE];
-  return glob(["**/*.{jsx,tsx,html}"], {
+  return glob(["**/*.{jsx,tsx,html,ts,js,css,scss}"], {
     cwd: dir,
     absolute: true,
     ignore,
   });
 }
-scanCode();
-export { ScanMedia };
+
+export { scanMedia, scanCode };
