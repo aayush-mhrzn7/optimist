@@ -34,7 +34,6 @@ program
       chalk.hex("#F1F1F1").dim("─────────────────────────────────────────\n"),
     );
 
-    // DRY RUN
     let isDryRun = options.dryRun;
     if (isDryRun === undefined) {
       const { dryRunAnswer } = await inquirer.prompt([
@@ -54,7 +53,6 @@ program
         chalk.yellow("\n⚠ Running in DRY RUN mode. No files will be modified."),
       );
 
-    // Compression quality
     let quality = parseInt(options.quality, 10) || 80;
     if (!options.quality) {
       const { qualityAnswer } = await inquirer.prompt([
@@ -74,7 +72,6 @@ program
       quality = parseInt(qualityAnswer, 10);
     }
 
-    // ---------- GET FILES ----------
     const files = fs.existsSync(targetDir) ? fs.readdirSync(targetDir) : [];
 
     const images = files.filter((f) =>
