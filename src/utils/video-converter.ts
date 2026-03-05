@@ -4,39 +4,34 @@ import ffmpeg from "fluent-ffmpeg";
 import chalk from "chalk";
 
 export interface VideoOptions {
-  dir: string;
+  files: string[];
   dryRun: boolean;
   deleteOriginals: boolean;
   cpuUsed: number;
 }
 
-export async function convertVideos(options: VideoOptions) {
-  const { dir, dryRun, deleteOriginals, cpuUsed } = options;
-  if (!fs.existsSync(dir)) return;
+export async function convertVideos(
+  options: VideoOptions,
+): Promise<Record<string, string>> {
+  const { files, dryRun, deleteOriginals, cpuUsed } = options;
+  const mapping: Record<string, string> = {};
 
-  const files = fs.readdirSync(dir);
-  const videos = files.filter((f) =>
-    [".mp4", ".mov"].includes(path.extname(f).toLowerCase()),
-  );
-
-  if (videos.length === 0) {
+  if (files.length === 0) {
     console.log(chalk.gray("\nNo videos found to process."));
-    return;
+    return mapping;
   }
 
-  console.log(chalk.blue(`\nProcessing ${videos.length} video(s) in ${dir}`));
+  if (dryRun) {
+    console.log(
+      chalk.yellow(`[DRY RUN] Would convert ${files.length} video(s) to WebM.`),
+    );
+    return mapping;
+  }
 
-  for (const file of videos) {
-    const inputPath = path.join(dir, file);
-    const outputName = path.basename(file, path.extname(file)) + ".webm";
-    const outputPath = path.join(dir, outputName);
+  console.log(chalk.blue(`\nProcessing ${files.length} video(s)`));
 
-    if (dryRun) {
-      console.log(
-        chalk.yellow(`[DRY RUN] Would convert: ${file} → ${outputName}`),
-      );
-      continue;
-    }
+  for (const inputPath of files) {
+    const outputPath = inputPath.replace(/\.(mp4|mov)$/i, ".webm");
 
     await new Promise<void>((resolve, reject) => {
       ffmpeg(inputPath)
@@ -48,19 +43,30 @@ export async function convertVideos(options: VideoOptions) {
         ])
         .on("error", (err) => {
           console.error(
-            chalk.red(`✖ Error converting ${file}: ${err.message}`),
+            chalk.red(
+              `✖ Error converting ${path.basename(inputPath)}: ${err.message}`,
+            ),
           );
           reject(err);
         })
         .on("end", () => {
-          console.log(chalk.green(`Converted: ${file} → ${outputName}`));
+          mapping[inputPath] = outputPath;
+          console.log(
+            chalk.green(
+              `Converted: ${path.basename(inputPath)} → ${path.basename(outputPath)}`,
+            ),
+          );
           if (deleteOriginals) {
             fs.unlinkSync(inputPath);
-            console.log(chalk.red(`Deleted original: ${file}`));
+            console.log(
+              chalk.red(`Deleted original: ${path.basename(inputPath)}`),
+            );
           }
           resolve();
         })
         .save(outputPath);
     });
   }
+
+  return mapping;
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"video-converter.d.ts","sourceRoot":"","sources":["../../src/utils/video-converter.ts"],"names":[],"mappings":"AAKA,MAAM,WAAW,YAAY;IAC3B,KAAK,EAAE,MAAM,EAAE,CAAC;IAChB,MAAM,EAAE,OAAO,CAAC;IAChB,eAAe,EAAE,OAAO,CAAC;IACzB,OAAO,EAAE,MAAM,CAAC;CACjB;AAED,wBAAsB,aAAa,CACjC,OAAO,EAAE,YAAY,GACpB,OAAO,CAAC,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC,CAyDjC"}

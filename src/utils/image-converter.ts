@@ -4,51 +4,50 @@ import sharp from "sharp";
 import chalk from "chalk";
 
 export interface ImageOptions {
-  dir: string;
+  files: string[]; // pre-scanned absolute paths from scanner
   quality: number;
   dryRun: boolean;
   deleteOriginals: boolean;
 }
 
-export async function convertImages(options: ImageOptions) {
-  const { dir, quality, dryRun, deleteOriginals } = options;
-  if (!fs.existsSync(dir)) return;
+export async function convertImages(
+  options: ImageOptions,
+): Promise<Record<string, string>> {
+  const { files, quality, dryRun, deleteOriginals } = options;
+  const mapping: Record<string, string> = {};
 
-  const files = fs.readdirSync(dir);
-  const images = files.filter((f) =>
-    [".jpg", ".jpeg", ".png"].includes(path.extname(f).toLowerCase()),
-  );
-  if (images.length === 0) {
+  if (files.length === 0) {
     console.log(chalk.gray("No images found to process."));
-    return;
+    return mapping;
   }
+
   if (dryRun) {
     console.log(
-      chalk.yellow(
-        `[DRY RUN] Would convert ${images.length} image(s) to WebP format in ${dir}.`,
-      ),
+      chalk.yellow(`[DRY RUN] Would convert ${files.length} image(s) to WebP.`),
     );
-    return;
+    return mapping;
   }
-  console.log(chalk.blue(`Found ${images.length} image(s). in ${dir}`));
-  for (const file of images) {
-    const inputPath = path.join(dir, file);
-    const outputPath = path.join(dir, `${path.parse(file).name}.webp`);
 
+  console.log(chalk.blue(`Found ${files.length} image(s).`));
+
+  for (const inputPath of files) {
+    const outputPath = inputPath.replace(/\.(png|jpe?g)$/i, ".webp");
     try {
       await sharp(inputPath).webp({ quality }).toFile(outputPath);
+      mapping[inputPath] = outputPath;
       console.log(
-        chalk.green(`Converted: ${file} → ${path.basename(outputPath)}`),
+        chalk.green(
+          `Converted: ${path.basename(inputPath)} → ${path.basename(outputPath)}`,
+        ),
       );
-
       if (deleteOriginals) {
         fs.unlinkSync(inputPath);
-        console.log(chalk.red(`Deleted original: ${file}`));
+        console.log(chalk.red(`Deleted original: ${path.basename(inputPath)}`));
       }
     } catch (err) {
-      console.error(chalk.red(`✖ Failed to convert ${file}: ${err}`));
+      console.error(chalk.red(`✖ Failed: ${path.basename(inputPath)}: ${err}`));
     }
   }
 
-  console.log(chalk.green(`\n✔ Converted ${images.length} image(s).\n`));
+  return mapping;
 }

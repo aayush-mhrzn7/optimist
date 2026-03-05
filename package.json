@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node src/index.ts"
+    "dev": "node src/index.ts",
+    "build": "tsc"
   },
   "keywords": [
     "react",
@@ -29,6 +30,7 @@
     "@types/fluent-ffmpeg": "^2.1.28",
     "@types/inquirer": "^9.0.9",
     "@types/node": "^25.3.3",
+    "@types/picomatch": "^4.0.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
