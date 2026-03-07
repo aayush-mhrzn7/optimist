@@ -9,21 +9,28 @@ Optimist is a zero-config CLI tool that converts your project's media files into
 ## Install
 
 ```bash
-npm install -g optimist
+npm install -g optimist-cli
 ```
+
 
 ---
 
 ## Usage
 
 ```bash
-npx optimist .
+npx optimist-cli 
+```
+---
+
+## HELP 
+```bash
+npx optimist-cli --help
 ```
 
 Optimist scans the current directory, finds all convertible media files, and prompts you through the process.
 
 ```
-$ npx optimist .
+$ npx optimist-cli .
 $ Would you like to run in Dry Run mode first to preview changes? No
 $ Would you like to Delete Original Files? yes
 
@@ -77,22 +84,6 @@ Modern browsers support WebM and WebP natively. Most projects still ship mp4, mo
 - **Images**: Quality 85 lossless WebP. Browser-native, universally supported.
 - **Zero config**: No setup files. Reads your assets and acts.
 
----
-
-## Requirements
-
-- Node.js 18+
-- `ffmpeg` installed and available in `PATH`
-
-```bash
-# macOS
-brew install ffmpeg
-
-# Ubuntu / Debian
-sudo apt install ffmpeg
-```
-
----
 
 ## License
 
