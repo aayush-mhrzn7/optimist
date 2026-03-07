@@ -11,7 +11,7 @@ const generate =
 
 export async function patchJS(
   codeFiles: string[],
-  mapping: Record<string, string>,
+  mapping: Record<string, string>, // mapping content example {"./assets/hero.png => ./assets/hero.webp"}
   targetDir: string,
   dryRun: boolean,
 ): Promise<{ updatedFilesCount: number; parseFailureFiles: string[] }> {
@@ -19,6 +19,7 @@ export async function patchJS(
   const parseFailureFiles: string[] = [];
 
   const normalizedMapping = new Map<string, string>();
+
   for (const [orig, converted] of Object.entries(mapping)) {
     normalizedMapping.set(path.normalize(orig), path.normalize(converted));
   }
@@ -28,7 +29,6 @@ export async function patchJS(
 
   for (const file of codeFiles) {
     const code = await fs.readFile(file, "utf8");
-
     let ast;
     try {
       ast = parse(code, {
@@ -45,21 +45,17 @@ export async function patchJS(
 
     traverse(ast, {
       StringLiteral(pathNode: any) {
+        // takes only the string value for example const a = "aayush" will only take the aayush part
         const rawValue: string = pathNode.node.value;
         if (typeof rawValue !== "string") return;
-
         const source = rawValue.split("?")[0];
-        if (!/\.(png|jpe?g|mp4|mov)$/i.test(source)) return;
-
-        const queryParam = rawValue.includes("?")
+        if (!/\.(png|jpe?g|mp4|mov)$/i.test(source)) return; // Regular expression to check if the source path is a file with ext of the specified file type
+        const queryParam = rawValue.includes("?") //if images are like ./hero.png?v=2 seperates the queryparams and joins them later
           ? "?" + rawValue.split("?")[1]
           : "";
-
         let matchedOriginal: string | undefined;
-
-        // absolute /public/ path — Next.js style: src="/images/hero.png"
         if (source.startsWith("/")) {
-          const cleanSource = source.replace(/^\//, "");
+          const cleanSource = source.replace(/^\//, ""); // replaces the leading slash finds the first / and replaces it with ""
           for (const [origPath] of normalizedMapping.entries()) {
             if (
               origPath.endsWith(path.join("public", cleanSource)) ||
@@ -70,15 +66,13 @@ export async function patchJS(
             }
           }
         } else {
-          // relative path: ./assets/hero.png
           const resolved = path.normalize(
             path.resolve(path.dirname(file), source),
           );
           if (normalizedMapping.has(resolved)) {
             matchedOriginal = resolved;
           } else {
-            // alias fallback: @/images/hero.png or ~/images/hero.png
-            const cleanSource = source.replace(/^@\/?|^~\//, "");
+            const cleanSource = source.replace(/^@\/?|^~\//, ""); // removes the alias like @ or ~/
             for (const [origPath] of normalizedMapping.entries()) {
               if (origPath.endsWith(cleanSource)) {
                 matchedOriginal = origPath;
@@ -95,8 +89,6 @@ export async function patchJS(
               .replace(/\.(mp4|mov)$/i, ".webm") + queryParam;
 
           pathNode.node.value = newSource;
-
-          // update extra.raw so Babel generator outputs the new value
           if (pathNode.node.extra) {
             pathNode.node.extra.rawValue = newSource;
             const quote = (pathNode.node.extra.raw as string)?.[0] || '"';

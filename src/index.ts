@@ -36,7 +36,6 @@ program
       chalk.hex("#F1F1F1").dim("─────────────────────────────────────────\n"),
     );
 
-    // ── dry run prompt
     let isDryRun = options.dryRun;
     if (isDryRun === undefined) {
       const { dryRunAnswer } = await inquirer.prompt([
@@ -56,7 +55,6 @@ program
         chalk.yellow("\n⚠ Running in DRY RUN mode. No files will be modified."),
       );
 
-    // ── quality prompt
     let quality = parseInt(options.quality, 10) || 80;
     if (!options.quality) {
       const { qualityAnswer } = await inquirer.prompt([
@@ -76,7 +74,6 @@ program
       quality = parseInt(qualityAnswer, 10);
     }
 
-    // ── scan
     console.log(chalk.dim("\nScanning project...\n"));
     const { images, videos } = await scanMedia(targetDir);
     const codeFiles = await scanCode(targetDir);
@@ -92,7 +89,6 @@ program
       return;
     }
 
-    // ── delete originals prompt
     let deleteOriginals = options.deleteOriginals ?? false;
     if (!isDryRun && !options.deleteOriginals) {
       const { deleteAnswer } = await inquirer.prompt([
@@ -106,7 +102,6 @@ program
       deleteOriginals = deleteAnswer;
     }
 
-    // ── image conversion
     let imageMapping: Record<string, string> = {};
     if (images.length > 0) {
       const imgOpts: ImageOptions = {
@@ -118,7 +113,6 @@ program
       imageMapping = await convertImages(imgOpts);
     }
 
-    // ── video conversion
     let videoMapping: Record<string, string> = {};
     if (videos.length > 0) {
       let cpuUsed = 2;
@@ -149,8 +143,6 @@ program
       };
       videoMapping = await convertVideos(vidOpts);
     }
-
-    // ── patch code references
     if (!options.skipPatch && codeFiles.length > 0) {
       const mapping = { ...imageMapping, ...videoMapping };
 
