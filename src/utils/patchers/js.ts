@@ -9,6 +9,38 @@ const traverse =
 const generate =
   typeof _generate === "function" ? _generate : (_generate as any).default;
 
+/**
+ * Patches JavaScript/TypeScript code files by updating references to images and videos.
+ *
+ * This function parses each code file into an AST (Abstract Syntax Tree) using
+ * Babel, traverses the tree to find string literals pointing to media files
+ * (PNG, JPG, JPEG, MP4, MOV), and updates them based on the provided mapping.
+ * Query parameters like `?v=2` are preserved during replacement. Supports
+ * both absolute paths (starting with "/") and relative paths.
+ *
+ * @param {string[]} codeFiles - Array of absolute paths to JS/TS code files to patch
+ * @param {Record<string, string>} mapping - A mapping of original media paths to converted paths.
+ *                                           Example: { "./assets/hero.png": "./assets/hero.webp" }
+ * @param {string} targetDir - The root directory of the project; used for relative path logging
+ * @param {boolean} dryRun - If true, will not write any changes, just reports what would change
+ * @returns {Promise<{ updatedFilesCount: number; parseFailureFiles: string[] }>}
+ *          Returns an object containing:
+ *          - updatedFilesCount: number of files successfully patched
+ *          - parseFailureFiles: array of file paths that failed to parse
+ *
+ * @example
+ * ```ts
+ * const { updatedFilesCount, parseFailureFiles } = await patchJS(
+ *   ['/project/src/App.tsx', '/project/src/components/Hero.tsx'],
+ *   { './assets/hero.png': './assets/hero.webp' },
+ *   '/project',
+ *   false
+ * );
+ *
+ * console.log(updatedFilesCount); // e.g. 2
+ * console.log(parseFailureFiles); // e.g. []
+ * ```
+ */
 export async function patchJS(
   codeFiles: string[],
   mapping: Record<string, string>, // mapping content example {"./assets/hero.png => ./assets/hero.webp"}
