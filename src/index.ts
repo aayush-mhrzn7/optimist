@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import { Command } from "commander";
 import inquirer from "inquirer";
 import chalk from "chalk";
@@ -11,7 +11,7 @@ import { patchJS } from "./utils/patchers/js.js";
 const program = new Command();
 
 program
-  .name("optimist")
+  .name("optimist-cli")
   .description(
     "CLI tool that optimizes images and videos for React/Next.js projects",
   )

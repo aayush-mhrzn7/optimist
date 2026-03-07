@@ -1,6 +1,6 @@
 {
-  "name": "optimist",
-  "version": "1.0.0",
+  "name": "optimist-cli",
+  "version": "1.0.1",
   "description": "optimist is a node cli that scans the codebase and finds things that slow your React/Next JS application primarily images and videos",
   "main": "dist/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   ],
   "author": "Aayush Maharjan",
   "bin": {
-    "optimist": "./dist/index.ts"
+    "optimist-cli": "dist/index.js"
   },
   "license": "ISC",
   "type": "module",
