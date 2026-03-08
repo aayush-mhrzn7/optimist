@@ -1,6 +1,6 @@
 {
   "name": "optimist-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "optimist is a node cli that scans the codebase and finds things that slow your React/Next JS application primarily images and videos",
   "main": "dist/index.js",
   "homepage": "https://optimist-three.vercel.app/",

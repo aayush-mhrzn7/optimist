@@ -12,19 +12,35 @@ Optimist is a zero-config CLI tool that converts your project's media files into
 npm install -g optimist-cli
 ```
 
-
 ---
 
 ## Usage
 
 ```bash
-npx optimist-cli 
+npx optimist-cli
 ```
+
 ---
 
-## HELP 
+## HELP
+
 ```bash
 npx optimist-cli --help
+```
+
+Arguments:
+dir Directory to scan (default: ".")
+
+Options:
+-V, --version output the version number
+--dry-run Run without writing any files
+--quality <number> WebP compression quality (default: "80")
+--delete-originals Delete original files after conversion
+--skip-patch Skip patching code references
+-h, --help display help for command
+
+```
+
 ```
 
 Optimist scans the current directory, finds all convertible media files, and prompts you through the process.
@@ -50,13 +66,13 @@ Files Conversion completed
 
 ## What it converts
 
-| Input | Output | Avg saving |
-|-------|--------|------------|
-| `.mp4` | `.webm` (VP9) | ~71% |
-| `.mov` | `.webm` (VP9) | ~68% |
-| `.jpg` | `.webp` | ~79% |
-| `.png` | `.webp` | ~82% |
-| `.gif` | `.webp` | ~91% |
+| Input  | Output        | Avg saving |
+| ------ | ------------- | ---------- |
+| `.mp4` | `.webm` (VP9) | ~71%       |
+| `.mov` | `.webm` (VP9) | ~68%       |
+| `.jpg` | `.webp`       | ~79%       |
+| `.png` | `.webp`       | ~82%       |
+| `.gif` | `.webp`       | ~91%       |
 
 ---
 
@@ -83,7 +99,6 @@ Modern browsers support WebM and WebP natively. Most projects still ship mp4, mo
 - **Video**: VP9 two-pass encode. Up to 75% smaller with no perceptible quality loss.
 - **Images**: Quality 85 lossless WebP. Browser-native, universally supported.
 - **Zero config**: No setup files. Reads your assets and acts.
-
 
 ## License
 
