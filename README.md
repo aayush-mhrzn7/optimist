@@ -31,6 +31,7 @@ npx optimist-cli --help
 Arguments:
 dir Directory to scan (default: ".")
 
+```
 Options:
 -V, --version output the version number
 --dry-run Run without writing any files
@@ -38,9 +39,6 @@ Options:
 --delete-originals Delete original files after conversion
 --skip-patch Skip patching code references
 -h, --help display help for command
-
-```
-
 ```
 
 Optimist scans the current directory, finds all convertible media files, and prompts you through the process.
@@ -103,3 +101,5 @@ Modern browsers support WebM and WebP natively. Most projects still ship mp4, mo
 ## License
 
 MIT © 2026 [Optimist CLI](https://github.com/aayush-mhrzn7/optimist)
+
+let me know how you like it 👋🏽
