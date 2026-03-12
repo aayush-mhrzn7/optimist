@@ -30,7 +30,7 @@ async function scanMedia(dir: string = ".") {
 
 async function scanCode(dir: string = ".") {
   const ignore = [...DEFAULT_IGNORE];
-  return glob(["**/*.{jsx,tsx,ts,js}"], {
+  return glob(["**/*.{jsx,tsx,ts,js,html,md}"], {
     cwd: dir,
     absolute: true,
     ignore,
